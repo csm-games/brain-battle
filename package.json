@@ -1,0 +1,41 @@
+{
+  "name": "brain-battle",
+  "version": "1.0.0",
+  "description": "An interactive educational card game that teaches cognitive behavioral therapy concepts through engaging gameplay",
+  "main": "index.html",
+  "scripts": {
+    "start": "start index.html",
+    "demo": "start demo.html",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "education",
+    "cognitive-behavioral-therapy",
+    "card-game",
+    "mental-health",
+    "social-emotional-learning",
+    "digital-wellness",
+    "interactive-learning",
+    "gamification"
+  ],
+  "author": "Educational Game Developer",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/brain-battle.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/brain-battle/issues"
+  },
+  "homepage": "https://yourusername.github.io/brain-battle/",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Battle - Demo Version</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .demo-highlight {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border: 3px solid #f6ad55;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .demo-info {
+            background: rgba(66, 153, 225, 0.1);
+            border: 2px solid #4299e1;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .demo-info h3 {
+            color: #2b6cb0;
+            margin-bottom: 10px;
+        }
+        
+        .demo-info p {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Initial Game Menu -->
+    <div class="initial-menu" id="initialMenu">
+        <div class="menu-content">
+            <h1>🧠 Brain Battle</h1>
+            <p class="subtitle">Educational Cognitive Behavioral Therapy Games</p>
+            <div class="menu-description">
+                <p>Choose your game mode and learn about thinking patterns, emotional regulation, and healthy coping strategies through strategic gameplay!</p>
+            </div>
+            
+            <div class="game-modes">
+                <div class="game-mode-card active" data-mode="brain-battle">
+                    <div class="game-mode-icon">🧠</div>
+                    <h3>Brain Battle</h3>
+                    <p class="game-mode-description">The original cognitive behavioral therapy card game. Learn about thinking traps vs. alternative thoughts.</p>
+                    <div class="game-mode-status">Available Now</div>
+                </div>
+                
+                                            <div class="game-mode-card" data-mode="tricky-tech">
+                                <div class="game-mode-icon">📱</div>
+                                <h3>Tricky Tech</h3>
+                                <p class="game-mode-description">Navigate digital wellness challenges and learn healthy technology habits through strategic gameplay.</p>
+                                <div class="game-mode-status">Available Now</div>
+                            </div>
+                
+                <div class="game-mode-card coming-soon" data-mode="brain-battle-ultimate">
+                    <div class="game-mode-icon">⚡</div>
+                    <h3>Brain Battle Ultimate</h3>
+                    <p class="game-mode-description">The ultimate challenge combining all game modes with advanced strategies and expanded card sets.</p>
+                    <div class="game-mode-status">Coming Soon</div>
+                </div>
+            </div>
+            
+            <div class="menu-buttons" id="menuButtons" style="display: none;">
+                <button class="btn btn-primary btn-large" id="playGame">🎮 Play Brain Battle</button>
+                <button class="btn btn-secondary btn-large" id="showRulesMenu">📖 How to Play</button>
+                <button class="btn btn-info btn-large" id="showFeatures">🎯 Game Features</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-container" id="gameContainer" style="display: none;">
+        <!-- Demo Header -->
+        <header class="game-header demo-highlight">
+            <div class="game-controls">
+                <button class="btn btn-secondary" id="resetGame">Reset Demo</button>
+                <button class="btn btn-warning" id="backToMenu">← Back to Menu</button>
+                <button class="btn btn-sound" id="soundToggle" title="Toggle Sound">
+                    <span class="sound-icon">🔊</span>
+                </button>
+            </div>
+            <div class="timer-container">
+                <span class="timer-label">Time:</span>
+                <span class="timer" id="timer">10:00</span>
+            </div>
+        </header>
+
+        <!-- Turn Indicator -->
+        <div class="turn-indicator" id="turnIndicator">
+            <span class="turn-text">🧠 Thinking Traps' Turn</span>
+        </div>
+
+
+        <!-- Game Board - New Layout -->
+        <div class="game-board">
+            <!-- Top Row - Brain Health Tracker and Event Cards -->
+            <div class="top-row">
+                <!-- Left Event Card Pile -->
+                <div class="event-card-pile left-pile">
+                    <h4>EVENT CARD PILE</h4>
+                    <div class="event-card" id="thinkingTrapsEvent">Event Card</div>
+                </div>
+                
+                <!-- Brain Health Tracker - Centered -->
+                <div class="brain-health-tracker">
+                    <h3>BRAIN HEALTH TRACKER</h3>
+                    <div class="health-bar-container">
+                        <div class="health-scale">
+                            <span>-100</span>
+                            <span>-50</span>
+                            <span>0</span>
+                            <span>50</span>
+                            <span>100</span>
+                        </div>
+                        <div class="health-bar">
+                            <div class="health-fill" id="healthFill"></div>
+                            <div class="health-marker" id="healthMarker">🧠</div>
+                        </div>
+                        <div class="current-health-display">
+                            <span class="health-label">Current Health:</span>
+                            <span class="current-health" id="currentHealth">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Event Card Pile -->
+                <div class="event-card-pile right-pile">
+                    <h4>EVENT CARD PILE</h4>
+                    <div class="event-card" id="alternativeThoughtsEvent">Event Card</div>
+                </div>
+            </div>
+            
+            <!-- Main Game Area -->
+            <div class="main-game-area">
+                <!-- Left Side - Thinking Traps Hand -->
+                <div class="hand-section thinking-traps-hand">
+                    <h4>HAND OF THINKING TRAPS</h4>
+                    <div class="hand-controls">
+                        <button class="btn btn-info shuffle-one" id="shuffleThinkingTraps">🔀 Shuffle One</button>
+                    </div>
+                    <div class="hand-carousel">
+                        <button class="carousel-nav prev" id="thinkingTrapsPrev">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                            </svg>
+                        </button>
+                        <button class="carousel-nav next" id="thinkingTrapsNext">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                            </svg>
+                        </button>
+                        <div class="hand-carousel-content" id="thinkingTrapsHand"></div>
+                    </div>
+                    <div class="carousel-indicators" id="thinkingTrapsIndicators"></div>
+                </div>
+                
+                <!-- Center - Battle Zone -->
+                <div class="battle-zone">
+                    <h4>BATTLE ZONE</h4>
+                    <div class="active-card-area">
+                        <h5>ACTIVE CARD AREA</h5>
+                        <div class="active-cards-container">
+                            <div class="active-card-slot thinking-traps">
+                                <h6>🧠 Active</h6>
+                                <div class="active-card-slot-content" id="thinkingTrapsActive"></div>
+                            </div>
+                            <div class="active-card-slot alternative-thoughts">
+                                <h6>💡 Active</h6>
+                                <div class="active-card-slot-content" id="alternativeThoughtsActive"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="battle-zone-cards">
+                        <h5>Cards in Battle</h5>
+                        <div class="battle-zone-content" id="battleZone"></div>
+                    </div>
+                </div>
+                
+                <!-- Right Side - Alternative Thoughts Hand -->
+                <div class="hand-section alternative-thoughts-hand">
+                    <h4>HAND OF ALTERNATIVE THOUGHTS</h4>
+                    <div class="hand-controls">
+                        <button class="btn btn-info shuffle-one" id="shuffleAlternativeThoughts">🔀 Shuffle One</button>
+                    </div>
+                    <div class="hand-carousel">
+                        <button class="carousel-nav prev" id="alternativeThoughtsPrev">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                            </svg>
+                        </button>
+                        <button class="carousel-nav next" id="alternativeThoughtsNext">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                            </svg>
+                        </button>
+                        <div class="hand-carousel-content" id="alternativeThoughtsHand"></div>
+                    </div>
+                    <div class="carousel-indicators" id="alternativeThoughtsIndicators"></div>
+                </div>
+            </div>
+            
+            <!-- Bottom Row - Removed Cards -->
+            <div class="bottom-row">
+                <div class="removed-cards-area">
+                    <h4>CARDS REMOVED FROM THE GAME</h4>
+                    <div class="removed-cards" id="removedCards"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Game Log -->
+        <div class="game-log">
+            <h4>Game Log</h4>
+            <div class="log-content" id="gameLog"></div>
+        </div>
+
+    </div>
+
+    <!-- Rules Modal -->
+    <div class="modal" id="rulesModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Brain Battle Rules</h2>
+            <div class="rules-content">
+                <h3>Objective</h3>
+                <p>Thinking Traps team tries to reduce Brain Health to -100, while Alternative Thoughts team tries to increase it to +100.</p>
+                
+                <h3>How to Play</h3>
+                <ol>
+                    <li>Play a card from your hand</li>
+                    <li>Choose one of the two moves on your card</li>
+                    <li>Target Brain Health or opponent's cards</li>
+                    <li>Explain the thinking pattern for educational value</li>
+                    <li>Use Event Cards for special effects</li>
+                </ol>
+
+                <h3>Card Types</h3>
+                <p><strong>Thinking Traps:</strong> All-or-Nothing, Labeler, Mind Reader, Negative Filter, Should Monster, Personalizer, Fortune Teller</p>
+                <p><strong>Alternative Thoughts:</strong> Middle Path Finder, Growth Mindset, Fact Checker, Balanced Viewer, Flexible Thinker, Reality Checker, Possibility Explorer</p>
+
+                <h3>Special Rules</h3>
+                <p>Alternative Thoughts are especially effective (+10 damage) against their corresponding Thinking Traps!</p>
+                
+                <h3>Event Cards</h3>
+                <p><strong>Thinking Traps:</strong> Social Media Storm, Distraction Overload</p>
+                <p><strong>Alternative Thoughts:</strong> Rest & Recharge, Friend Support</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Modal -->
+    <div class="modal" id="featuresModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Brain Battle Features</h2>
+            <div class="rules-content">
+                <h3>🎯 Educational Content</h3>
+                <ul>
+                    <li>7 Thinking Trap cards with real cognitive distortion examples</li>
+                    <li>7 Alternative Thought cards with healthy thinking strategies</li>
+                    <li>Event cards connecting to digital wellness concepts</li>
+                    <li>Detailed descriptions for each thinking pattern</li>
+                </ul>
+
+                <h3>🎮 Game Mechanics</h3>
+                <ul>
+                    <li>Turn-based gameplay with alternating teams</li>
+                    <li>Card management system (hand, active, battle zone)</li>
+                    <li>Health point system for cards and Brain Health</li>
+                    <li>Counter bonus system for strategic play</li>
+                    <li>Move restriction (can't use same move twice)</li>
+                </ul>
+
+                <h3>💻 Technical Features</h3>
+                <ul>
+                    <li>Fully responsive design for all devices</li>
+                    <li>Real-time game logging</li>
+                    <li>10-minute timer with automatic game end</li>
+                    <li>Visual health tracking with color-coded indicators</li>
+                    <li>Modal windows for rules and information</li>
+                </ul>
+
+                <h3>🎨 User Experience</h3>
+                <ul>
+                    <li>Modern, engaging interface design</li>
+                    <li>Color-coded teams and cards</li>
+                    <li>Smooth animations and transitions</li>
+                    <li>Hover effects and visual feedback</li>
+                    <li>Accessible design principles</li>
+                </ul>
+
+                <h3>📱 Device Compatibility</h3>
+                <ul>
+                    <li>Desktop computers (1200px+)</li>
+                    <li>Tablets (768px - 1199px)</li>
+                    <li>Mobile phones (320px - 767px)</li>
+                    <li>Landscape orientation support</li>
+                    <li>Touch-friendly interface</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Targeting Modal -->
+    <div class="modal" id="targetingModal">
+        <div class="modal-content targeting-modal">
+            <div id="targetingContent"></div>
+        </div>
+    </div>
+
+    <!-- Win Modal -->
+    <div class="modal" id="winModal">
+        <div class="modal-content win-modal">
+            <div class="win-content">
+                <div class="win-icon" id="winIcon">🏆</div>
+                <h2 class="win-title" id="winTitle">Game Over!</h2>
+                <p class="win-message" id="winMessage">Congratulations!</p>
+                <div class="win-buttons">
+                    <button class="btn btn-primary" id="playAgainBtn">🎮 Play Again</button>
+                    <button class="btn btn-secondary" id="backToMenuBtn">← Back to Menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+    <script>
+        // Demo-specific functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize the game
+            game = new BrainBattleGame();
+            
+            // Add demo features button
+            document.getElementById('showFeatures').addEventListener('click', () => {
+                document.getElementById('featuresModal').style.display = 'block';
+            });
+            
+            // Add demo welcome message
+            game.logGameEvent('🎉 Welcome to Brain Battle Demo!');
+            game.logGameEvent('📚 This is an educational card game about cognitive behavioral therapy');
+            game.logGameEvent('🧠 Click "Start Demo Game" to begin playing');
+            game.logGameEvent('💡 Learn about thinking traps and alternative thoughts');
+            game.logGameEvent('📱 Game is fully responsive and works on all devices!');
+        });
+    </script>
+</body>
+</html>
